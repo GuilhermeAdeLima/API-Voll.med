@@ -6,6 +6,7 @@ public record DadosEndereco
          String cep,
          String uf,
          String complemento,
+         String cidade,
          String numero) {
 
 }
