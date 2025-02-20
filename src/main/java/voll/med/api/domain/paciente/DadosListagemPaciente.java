@@ -1,4 +1,4 @@
-package voll.med.api.paciente;
+package voll.med.api.domain.paciente;
 
 
 

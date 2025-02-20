@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import voll.med.api.medico.*;
+import voll.med.api.domain.medico.*;
 
 @RestController
 @RequestMapping("/medicos")
@@ -53,6 +53,13 @@ public class MedicoController {
         medico.excluir();
 
         return ResponseEntity.noContent().build();
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detalhar(@PathVariable Long id) {
+        var medico = repository.getReferenceById(id);
+        return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
 
     }
 
