@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import voll.med.api.domain.ValidacaoExeption;
 
 
 @RestControllerAdvice
@@ -27,6 +28,12 @@ public class TratadorDeErros {
         return ResponseEntity.badRequest().body(erros.stream()
                 .map(DadosErroValidacao::new)
                 .toList());
+    }
+
+    @ExceptionHandler(ValidacaoExeption.class)
+    public ResponseEntity tratarErroRegraDeNegocio(ValidacaoExeption ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
