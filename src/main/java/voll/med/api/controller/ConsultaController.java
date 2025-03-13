@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import voll.med.api.domain.consulta.AgendaDeConsultas;
 import voll.med.api.domain.consulta.DadosAgendamentoConsulta;
+import voll.med.api.domain.consulta.DadosCancelamentoConsulta;
 import voll.med.api.domain.consulta.DadosDetalhamentoCunsulta;
 
 @RestController
@@ -21,6 +22,13 @@ public class ConsultaController {
     public ResponseEntity agendar(@RequestBody @Valid DadosAgendamentoConsulta dados) {
         var dto = agenda.agendar(dados);
         return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity cancelar(@RequestBody @Valid DadosCancelamentoConsulta dados) {
+        agenda.cancelar(dados);
+        return ResponseEntity.noContent().build();
     }
 
 }
