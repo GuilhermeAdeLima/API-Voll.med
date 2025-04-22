@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import voll.med.api.domain.consulta.Consulta;
+import voll.med.api.domain.consulta.validacoes.MotivoCancelamento;
 import voll.med.api.domain.endereco.DadosEndereco;
 import voll.med.api.domain.paciente.DadosCadastroPaciente;
 import voll.med.api.domain.paciente.Paciente;
@@ -65,9 +66,32 @@ class MedicoRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("Deveria devolver medico quando consulta for cancelada")
+    void escolherMedicoAleatorioLivreNaDataCenario3() {
+        //given ou arrange
+        var proximaSegundaAs10 = LocalDate.now()
+                .with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+                .atTime(10, 0, 0, 0);
 
-    private void cadastrarConsulta(Medico medico, Paciente paciente, LocalDateTime data) {
-        em.persist(new Consulta(null, medico, paciente, data, null));
+        var medico = cadastrarMedico("Medico", "medico@voll.med", "123456", Especialidade.CARDIOLOGIA);
+        var paciente = cadastrarPaciente("Paciente", "paciente@email.com", "00000000000");
+        var consulta = cadastrarConsulta(medico, paciente, proximaSegundaAs10);
+        consulta.cancelar(MotivoCancelamento.MEDICO_CANCELOU);
+
+        //when ou act
+        var medicoLivre = medicoRepository.escolherMedicoAleatorioLivreNaData(Especialidade.CARDIOLOGIA, proximaSegundaAs10);
+
+        //then ou assert
+        assertThat(medicoLivre).isEqualTo(medico);
+
+    }
+
+
+    private Consulta cadastrarConsulta(Medico medico, Paciente paciente, LocalDateTime data) {
+        var consulta = new Consulta(null, medico, paciente, data, null);
+        em.persist(consulta);
+        return consulta;
     }
 
     private Medico cadastrarMedico(String nome, String email, String crm, Especialidade especialidade) {
