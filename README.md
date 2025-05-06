@@ -54,6 +54,7 @@ Foram implementados **testes unitários** utilizando **DataJpaTest**, garantindo
 
 💻 Importação para IDE
 Para importar o projeto na sua IDE favorita:
+
 IntelliJ IDEA
 - Abra o IntelliJ IDEA.
 - Vá em File > Open e selecione o diretório do projeto.
